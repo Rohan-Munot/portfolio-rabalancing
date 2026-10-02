@@ -2,13 +2,22 @@ export const config = {
   runtime: "edge",
 }
 
-export default async function handler(request: Request) {
+export default async function (request: Request): Promise<Response> {
   const url = new URL(request.url)
-  const pathParam = url.searchParams.get("path") ?? ""
+
+  let yahooPath = url.searchParams.get("path") ?? ""
+  if (!yahooPath) {
+    yahooPath = url.pathname.replace(/^\/api\/yahoo\/?/, "")
+  }
+
+  if (!yahooPath) {
+    return Response.json({ error: "Missing Yahoo path" }, { status: 400 })
+  }
+
   const query = new URLSearchParams(url.searchParams)
   query.delete("path")
   const search = query.toString()
-  const target = `https://query1.finance.yahoo.com/${pathParam}${search ? `?${search}` : ""}`
+  const target = `https://query1.finance.yahoo.com/${yahooPath}${search ? `?${search}` : ""}`
 
   const response = await fetch(target, {
     headers: {
