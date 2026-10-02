@@ -77,8 +77,13 @@ async function fetchChart(
   period1: number,
   period2: number,
 ): Promise<ChartPayload> {
-  const encoded = encodeURIComponent(ticker)
-  const url = `/api/yahoo/v8/finance/chart/${encoded}?period1=${period1}&period2=${period2}&interval=1d`
+  const params = new URLSearchParams({
+    path: `v8/finance/chart/${ticker}`,
+    period1: String(period1),
+    period2: String(period2),
+    interval: "1d",
+  })
+  const url = `/api/yahoo?${params}`
   const response = await fetch(url)
   if (!response.ok) {
     throw new Error(`Yahoo Finance request failed for ${ticker} (${response.status})`)

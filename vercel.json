@@ -3,8 +3,5 @@
   "outputDirectory": "dist",
   "installCommand": "bun install",
   "framework": "vite",
-  "rewrites": [
-    { "source": "/api/yahoo/(.*)", "destination": "/api/yahoo?path=$1" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
-  ]
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
 }
